@@ -1,5 +1,6 @@
 ﻿using System;
 using Akka.Actor;
+using EstudosAkkanet.Presentation.Messages;
 
 namespace EstudosAkkanet.Presentation.Actors
 {
@@ -12,10 +13,12 @@ namespace EstudosAkkanet.Presentation.Actors
 
         protected override void OnReceive(object message)
         {
-            if(message is string)
-                Console.WriteLine("Received movie title: " + message);
-            else if (message is int)
-                Console.WriteLine("Received user Id: " + message);
+            if (message is PlayMovieMessage)
+            {
+                var playMovieMessage = message as PlayMovieMessage;
+                Console.WriteLine("Received movie title: " + playMovieMessage.MovieTitile);
+                Console.WriteLine("User Id: " + playMovieMessage.UserId);
+            }
             else
                 Unhandled(message);
         }

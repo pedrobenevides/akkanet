@@ -1,6 +1,7 @@
 ﻿using System;
 using Akka.Actor;
 using EstudosAkkanet.Presentation.Actors;
+using EstudosAkkanet.Presentation.Messages;
 
 namespace EstudosAkkanet.Presentation
 {
@@ -20,10 +21,7 @@ namespace EstudosAkkanet.Presentation
 
             Props playbackActorProps = Props.Create<PlaybackActor>();
             IActorRef playbackActorRef = _movieStreamingActorSystem.ActorOf(playbackActorProps, "PlaybackActor");
-            playbackActorRef.Tell("Akka.NET: The Movie");
-            playbackActorRef.Tell(42);
-            playbackActorRef.Tell('c');
-
+            playbackActorRef.Tell(new PlayMovieMessage("The Movie", 42));
             Console.ReadKey();
             _movieStreamingActorSystem.Shutdown();
         }
