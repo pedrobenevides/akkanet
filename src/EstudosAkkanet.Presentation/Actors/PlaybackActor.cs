@@ -4,23 +4,18 @@ using EstudosAkkanet.Presentation.Messages;
 
 namespace EstudosAkkanet.Presentation.Actors
 {
-    public class PlaybackActor : UntypedActor
+    public class PlaybackActor : ReceiveActor
     {
         public PlaybackActor()
         {
             Console.WriteLine("Creating a Playback Actor");
+            Receive<PlayMovieMessage>(message => HandlePlayMovieMessage(message));
         }
 
-        protected override void OnReceive(object message)
+        private static void HandlePlayMovieMessage(PlayMovieMessage message)
         {
-            if (message is PlayMovieMessage)
-            {
-                var playMovieMessage = message as PlayMovieMessage;
-                Console.WriteLine("Received movie title: " + playMovieMessage.MovieTitile);
-                Console.WriteLine("User Id: " + playMovieMessage.UserId);
-            }
-            else
-                Unhandled(message);
+            Console.WriteLine("Received movie title: " + message.MovieTitile);
+            Console.WriteLine("User Id: " + message.UserId);
         }
     }
 }
