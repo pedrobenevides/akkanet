@@ -19,9 +19,12 @@ namespace EstudosAkkanet.Presentation
             _movieStreamingActorSystem = ActorSystem.Create("MovieStreamingActorSystem");
             Console.WriteLine("Actor System created!");
 
-            Props playbackActorProps = Props.Create<PlaybackActor>();
-            IActorRef playbackActorRef = _movieStreamingActorSystem.ActorOf(playbackActorProps, "PlaybackActor");
-            playbackActorRef.Tell(new PlayMovieMessage("The Movie", 42));
+            Props userActorProps = Props.Create<UserActor>();
+            IActorRef userActorRef = _movieStreamingActorSystem.ActorOf(userActorProps, "PlaybackActor");
+
+            userActorRef.Tell(new PlayMovieMessage("The Movie", 42));
+            userActorRef.Tell(new PlayMovieMessage("Another Movie", 43));
+
             Console.ReadKey();
             _movieStreamingActorSystem.Shutdown();
         }
