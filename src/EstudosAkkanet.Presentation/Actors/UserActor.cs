@@ -7,11 +7,17 @@ namespace EstudosAkkanet.Presentation.Actors
     public class UserActor : ReceiveActor
     {
         private string watchinMovieName;
+        private int userId;
 
         public UserActor()
         {
             Console.WriteLine("Actor created!");
             Stopped();
+        }
+
+        public UserActor(int userId)
+        {
+            this.userId = userId;
         }
 
         private void Playing()
