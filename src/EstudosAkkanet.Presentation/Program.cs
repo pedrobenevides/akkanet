@@ -11,51 +11,42 @@ namespace EstudosAkkanet.Presentation
 
         static void Main(string[] args)
         {
-            const string PATH = "/user/Playback/UserCoordinator";
-            Console.WriteLine("Creating MovieStreamingActorSystem");
+            //Actor System são criados atraves do ActorSystemCreate
             movieStreamingActorSystem = ActorSystem.Create("MovieStreamingActorSystem");
+            Console.WriteLine("Actor System created");
 
-            Console.WriteLine("Creating actor supervisory hierarchy");
-            movieStreamingActorSystem.ActorOf(Props.Create<PlaybackActor>(), "Playback");
+            var userActorProps = Props.Create<UserActor>();
+            var userActorRef = movieStreamingActorSystem.ActorOf(userActorProps, "UserActor");
             
-            do
-            {
-                Console.WriteLine("enter a command and hot enter");
-                var command = Console.ReadLine();
-
-                if(string.IsNullOrEmpty(command))
-                    throw new Exception("Invalid Command");
-
-                if (command.StartsWith("play"))
-                {
-                    var userId = int.Parse(command.Split(',')[1]);
-                    var movieTitle = command.Split(',')[2];
-
-                    var message = new PlayMovieMessage(movieTitle, userId);
-                    movieStreamingActorSystem.ActorSelection(PATH).Tell(message);
-                }
-
-                if (command.StartsWith("stop"))
-                {
-                    movieStreamingActorSystem.ActorSelection(PATH).Tell(message);
-                }
-
-            } while (true);
-        }
-
-        private static void PlaygroundAkka()
-        {
-            movieStreamingActorSystem = ActorSystem.Create("MovieStreamingActorSystem");
-            Console.WriteLine("Actor System created!");
-
-            Props userActorProps = Props.Create<UserActor>();
-            IActorRef userActorRef = movieStreamingActorSystem.ActorOf(userActorProps, "PlaybackActor");
-
-            userActorRef.Tell(new PlayMovieMessage("The Movie", 42));
-            userActorRef.Tell(new PlayMovieMessage("Another Movie", 43));
+            Console.ReadKey();
+            Console.WriteLine("Sending a PlayMovieMessage (Partial Recall)");
+            userActorRef.Tell(new PlayMovieMessage("Partial Reacall", 99));
 
             Console.ReadKey();
+            Console.WriteLine("Sending a PlayMovieMessage (Boolean Lies)");
+            userActorRef.Tell(new PlayMovieMessage("Boolean Lies", 77));
+
+            Console.ReadKey();
+            Console.WriteLine("Sending a PlayMovieMessage (Codenan the Destroyer)");
+            userActorRef.Tell(new PlayMovieMessage("Codenan the Destroyer", 1));
+
+            Console.ReadKey();
+            Console.WriteLine("Sending a StopMovieMessage");
+            userActorRef.Tell(new StopMovieMessage());
+
+            Console.ReadKey();
+            Console.WriteLine("Sending another StopMovieMessage");
+            userActorRef.Tell(new StopMovieMessage());
+            
+            //Avisa aos Actors e aos Child Actors to Shutdown
             movieStreamingActorSystem.Shutdown();
+
+            //Bloqueia a Tread atual ate que ocorra o Shutdown do sistema
+            movieStreamingActorSystem.AwaitTermination();
+            Console.WriteLine("Actor system shutdown");
+
+            Console.ReadKey();
         }
     }
+
 }

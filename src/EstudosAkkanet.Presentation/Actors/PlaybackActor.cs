@@ -9,13 +9,31 @@ namespace EstudosAkkanet.Presentation.Actors
         public PlaybackActor()
         {
             Console.WriteLine("Creating a Playback Actor");
-            Receive<PlayMovieMessage>(message => HandlePlayMovieMessage(message));
+            Context.ActorOf(Props.Create<UserCoordinatorActor>(), "UserCoordinator");
+            Context.ActorOf(Props.Create<PlaybackStatisticsActor>(), "PlaybackStatistics");
+        }
+       
+        protected override void PreStart()
+        {
+            Console.WriteLine("#[PreStart]# Playback actor PreStart");
         }
 
-        private static void HandlePlayMovieMessage(PlayMovieMessage message)
+        protected override void PostStop()
         {
-            Console.WriteLine("Received movie title: " + message.MovieTitile);
-            Console.WriteLine("User Id: " + message.UserId);
+            Console.WriteLine("#[PostStop]# Playback actor PostStop");
         }
+
+        protected override void PreRestart(Exception reason, object message)
+        {
+            Console.WriteLine($"#[PreRestart]# PlaybackActor PreRestart because: {reason}");
+            base.PreRestart(reason, message);
+        }
+
+        protected override void PostRestart(Exception reason)
+        {
+            Console.WriteLine($"#[PostRestart]# PlaybackActor PostRestart because: {reason}");
+            base.PostRestart(reason);
+        }
+
     }
 }

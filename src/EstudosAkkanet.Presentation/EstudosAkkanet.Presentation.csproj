@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actors\PlaybackActor.cs" />
+    <Compile Include="Actors\PlaybackStatisticsActor.cs" />
     <Compile Include="Actors\UserCoordinatorActor.cs" />
     <Compile Include="Messages\StopMovieMessage.cs" />
     <Compile Include="Actors\UserActor.cs" />
